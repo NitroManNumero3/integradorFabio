@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
       JOIN persona p ON p.id = al.persona_id
       ORDER BY p.apellidos, p.nombre
     `);
-    // Renderiza la vista 'alumnos.ejs' pasando el array de alumnos
+
     res.render('alumnos', { alumnos: rows });
   } catch (err) {
     console.error('❌ Error en la base de datos:', err);
@@ -145,6 +145,7 @@ router.post('/matricular', async (req, res) => {
     await pool.query(
       'INSERT INTO matricula (alumno_id, asignatura_id, nota, incidencias) VALUES (?, ?, ?, ?)',
       [alumno_id, asignatura_id, nota || null, incidencias || null]
+
     );
     
     // Redirige a la página de detalle del alumno

@@ -18,10 +18,12 @@ router.get('/', async (req, res) => {
         a.id,
         a.codigo,
         a.nombre, 
+
         a.horas_semanales, 
         c.nombre AS curso,
         c.codigo AS codigo_curso,
         CONCAT(p.nombre, ' ', p.apellidos) AS profesor
+
       FROM asignatura a
       LEFT JOIN curso c ON a.curso_id = c.id
       LEFT JOIN profesor pr ON a.profesor_id = pr.id
@@ -151,10 +153,12 @@ router.post('/nueva', async (req, res) => {
     const { codigo, nombre, horas_semanales, curso_id, profesor_id } = req.body;
     // Inserta la nueva asignatura en la base de datos
     await pool.query(`
+
       INSERT INTO asignatura (codigo, nombre, horas_semanales, curso_id, profesor_id)
       VALUES (?, ?, ?, ?, ?)
     `, [codigo, nombre, horas_semanales, curso_id, profesor_id]);
     // Redirige al listado de asignaturas
+
     res.redirect('/asignaturas');
   } catch (err) {
     console.error('❌ Error al guardar asignatura:', err);
