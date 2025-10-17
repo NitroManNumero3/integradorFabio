@@ -1,6 +1,49 @@
 <%- include('partials/header') %>
 
-<h2 class="mb-4">Listado de alumnos</h2>
+<style>
+  body {
+    background-color: #ffe6f2; /* rosita suave de fondo */
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h2 {
+    color: #ff4da6;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px #ffcce0;
+  }
+
+  .table {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(255, 105, 180, 0.2);
+  }
+
+  .table thead {
+    background-color: #ff99cc;
+    color: white;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffe6f2;
+  }
+
+  .btn-primary {
+    background-color: #ff66b2;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #ff4da6;
+  }
+
+  .table td, .table th {
+    vertical-align: middle;
+    text-align: center;
+  }
+</style>
+
+<h2 class="mb-4">🌸 Listado de alumnos</h2>
 
 <table class="table table-striped">
   <thead>
@@ -19,7 +62,6 @@
         <td><%= alumno.dni %></td>
         <td><%= alumno.edad %></td>
         <td><%= alumno.telefono %></td>
-
         <td>
           <a href="/alumnos/matricular/<%= alumno.alumno_id %>" class="btn btn-sm btn-primary">Matricular</a>
         </td>
