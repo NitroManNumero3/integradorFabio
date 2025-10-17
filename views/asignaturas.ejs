@@ -17,12 +17,13 @@
     <% asignaturas.forEach(a => { %>
       <tr>
         <td><%= a.nombre %></td>
-        <td><%= a.horas_semanales %></td>
+        <td><%= a.horas_semana %></td>
         <td><%= a.curso || 'Sin curso' %></td>
         <td><%= a.profesor || 'Sin asignar' %></td>
       </tr>
     <% }) %>
   </tbody>
+  
 </table>
 
 <%- include('partials/footer') %>

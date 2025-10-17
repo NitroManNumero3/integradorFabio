@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
       FROM alumno al 
       JOIN persona p ON p.id = al.persona_id
     `);
+    console.log('📦 Alumnos obtenidos:', rows);
     res.render('alumnos', { alumnos: rows });
   } catch (err) {
     console.error('❌ Error en la base de datos:', err);
@@ -39,7 +40,7 @@ router.post('/matricular', async (req, res) => {
     const { alumno_id, asignatura_id, nota } = req.body;
     await pool.query(
       'INSERT INTO matricula (alumno_id, asignatura_id, nota) VALUES (?, ?, ?)',
-      [alumno_id, asignatura_id, nota || null]
+      [alumno_id, asignatura_id, nota]
     );
     res.redirect('/alumnos');
   } catch (err) {

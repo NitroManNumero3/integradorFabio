@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
       SELECT 
         a.id, 
         a.nombre, 
-        a.horas_semanales, 
+        a.horas_semana, 
         c.nombre AS curso, 
         p.nombre AS profesor
       FROM asignatura a
@@ -46,7 +46,7 @@ router.post('/nueva', async (req, res) => {
   try {
     const { nombre, horas_semanales, curso_id, profesor_id } = req.body;
     await pool.query(`
-      INSERT INTO asignatura (nombre, horas_semanales, curso_id, profesor_id)
+      INSERT INTO asignatura (nombre, horas_semana, curso_id, profesor_id)
       VALUES (?, ?, ?, ?)
     `, [nombre, horas_semanales, curso_id, profesor_id]);
     res.redirect('/asignaturas');

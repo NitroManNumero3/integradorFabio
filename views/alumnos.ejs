@@ -15,10 +15,11 @@
   <tbody>
     <% alumnos.forEach(alumno => { %>
       <tr>
-        <td><%= alumno.nombre %> <%= alumno.apellidos %></td>
+        <td><%= alumno.nombre %> <%= alumno.apellido %></td>
         <td><%= alumno.dni %></td>
         <td><%= alumno.edad %></td>
         <td><%= alumno.telefono %></td>
+
         <td>
           <a href="/alumnos/matricular/<%= alumno.alumno_id %>" class="btn btn-sm btn-primary">Matricular</a>
         </td>
