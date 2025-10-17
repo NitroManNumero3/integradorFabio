@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<h2 class="mb-4">
+  <i class="bi bi-door-open"></i> Aulas
+</h2>
+
+<div class="table-responsive">
+  <table class="table table-hover table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Código</th>
+        <th>Piso</th>
+        <th>Nº Pupitres</th>
+        <th>Horarios</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (aulas.length === 0) { %>
+        <tr>
+          <td colspan="5" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No hay aulas registradas
+          </td>
+        </tr>
+      <% } else { %>
+        <% aulas.forEach(a => { %>
+          <tr>
+            <td><strong><%= a.codigo %></strong></td>
+            <td>Piso <%= a.piso %></td>
+            <td class="text-center"><%= a.num_pupitres %></td>
+            <td class="text-center">
+              <span class="badge bg-info"><%= a.num_horarios %></span>
+            </td>
+            <td>
+              <a href="/aulas/<%= a.id %>" class="btn btn-sm btn-info">
+                <i class="bi bi-eye"></i> Ver
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,68 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-door-open"></i> Aula <%= aula.codigo %>
+  </h2>
+  <a href="/aulas" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0">Información del Aula</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <p><strong>Código:</strong> <%= aula.codigo %></p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Piso:</strong> <%= aula.piso %></p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Capacidad:</strong> <%= aula.num_pupitres %> pupitres</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mb-3">
+  <i class="bi bi-calendar3"></i> Horarios de Clase
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Asignatura</th>
+        <th>Curso</th>
+        <th>Día</th>
+        <th>Mes</th>
+        <th>Horario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (horarios.length === 0) { %>
+        <tr>
+          <td colspan="5" class="text-center text-muted">
+            No hay horarios asignados a esta aula
+          </td>
+        </tr>
+      <% } else { %>
+        <% horarios.forEach(h => { %>
+          <tr>
+            <td><strong><%= h.asignatura_codigo %></strong> - <%= h.asignatura %></td>
+            <td><%= h.curso %></td>
+            <td><%= h.dia_semana %></td>
+            <td>Mes <%= h.mes %></td>
+            <td><%= h.hora_inicio.substring(0,5) %> - <%= h.hora_fin.substring(0,5) %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

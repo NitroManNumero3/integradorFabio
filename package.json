@@ -1,16 +1,16 @@
 {
   "name": "integradorfabio",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "keywords": [],
+  "keywords": ["educacion", "gestion", "centro-ensenanza"],
   "author": "el NitroMan",
   "license": "ISC",
-  "description": "",
+  "description": "Sistema de gestión para centro de enseñanza",
   "dependencies": {
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
