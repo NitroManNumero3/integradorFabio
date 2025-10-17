@@ -1,11 +1,19 @@
 import express from 'express';
 import pool from '../db/pool.js';
 
+// Crea un router de Express para gestionar las rutas de aulas
 const router = express.Router();
 
-// 📋 Listar todas las aulas
+/**
+ * GET /aulas
+ * Muestra el listado completo de todas las aulas
+ * Incluye el número de pupitres y la cantidad de horarios asignados
+ */
 router.get('/', async (req, res) => {
   try {
+    // Consulta que obtiene todas las aulas y cuenta sus horarios
+    // LEFT JOIN permite incluir aulas sin horarios asignados
+    // GROUP BY agrupa por aula para contar los horarios
     const [rows] = await pool.query(`
       SELECT 
         a.id,
@@ -18,6 +26,7 @@ router.get('/', async (req, res) => {
       GROUP BY a.id, a.codigo, a.piso, a.num_pupitres
       ORDER BY a.piso, a.codigo
     `);
+    // Renderiza la vista con el listado de aulas
     res.render('aulas', { aulas: rows });
   } catch (err) {
     console.error('❌ Error al obtener aulas:', err);
@@ -25,23 +34,29 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 📝 Ver detalle de un aula
+/**
+ * GET /aulas/:id
+ * Muestra el detalle de un aula específica con todos sus horarios
+ * @param {number} id - ID del aula
+ */
 router.get('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Extrae el ID de los parámetros de la URL
     
-    // Datos del aula
+    // Primera consulta: obtiene los datos del aula
     const [aula] = await pool.query(`
       SELECT id, codigo, piso, num_pupitres
       FROM aula
       WHERE id = ?
     `, [id]);
     
+    // Verifica si el aula existe
     if (aula.length === 0) {
       return res.status(404).send('Aula no encontrada');
     }
     
-    // Horarios del aula
+    // Segunda consulta: obtiene todos los horarios asignados al aula
+    // Incluye información de la asignatura y curso
     const [horarios] = await pool.query(`
       SELECT 
         h.id,
@@ -59,6 +74,7 @@ router.get('/:id', async (req, res) => {
       ORDER BY h.mes, h.dia_semana, h.hora_inicio
     `, [id]);
     
+    // Renderiza la vista de detalle con los datos del aula y sus horarios
     res.render('aulaDetalle', { aula: aula[0], horarios });
   } catch (err) {
     console.error('❌ Error al obtener detalle del aula:', err);

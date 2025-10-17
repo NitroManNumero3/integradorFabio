@@ -1,11 +1,19 @@
 import express from 'express';
 import pool from '../db/pool.js';
 
+// Crea un router de Express para gestionar las rutas de cursos
 const router = express.Router();
 
-// 📋 Listar todos los cursos
+/**
+ * GET /cursos
+ * Muestra el listado completo de todos los cursos
+ * Incluye el tutor asignado y el número de asignaturas de cada curso
+ */
 router.get('/', async (req, res) => {
   try {
+    // Consulta que une curso con profesor y persona, y cuenta las asignaturas
+    // LEFT JOIN permite incluir cursos sin tutor o sin asignaturas
+    // GROUP BY agrupa por curso para contar las asignaturas
     const [rows] = await pool.query(`
       SELECT 
         c.id,
@@ -21,6 +29,7 @@ router.get('/', async (req, res) => {
       GROUP BY c.id, c.codigo, c.nombre, p.nombre, p.apellidos, pr.id
       ORDER BY c.codigo
     `);
+    // Renderiza la vista con el listado de cursos
     res.render('cursos', { cursos: rows });
   } catch (err) {
     console.error('❌ Error al obtener cursos:', err);
@@ -28,12 +37,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 📝 Ver detalle de un curso
+/**
+ * GET /cursos/:id
+ * Muestra el detalle de un curso específico con todas sus asignaturas
+ * @param {number} id - ID del curso
+ */
 router.get('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Extrae el ID de los parámetros de la URL
     
-    // Datos del curso
+    // Primera consulta: obtiene los datos del curso y su tutor
     const [curso] = await pool.query(`
       SELECT 
         c.id,
@@ -47,11 +60,12 @@ router.get('/:id', async (req, res) => {
       WHERE c.id = ?
     `, [id]);
     
+    // Verifica si el curso existe
     if (curso.length === 0) {
       return res.status(404).send('Curso no encontrado');
     }
     
-    // Asignaturas del curso
+    // Segunda consulta: obtiene todas las asignaturas del curso
     const [asignaturas] = await pool.query(`
       SELECT 
         a.id,
@@ -66,6 +80,7 @@ router.get('/:id', async (req, res) => {
       ORDER BY a.nombre
     `, [id]);
     
+    // Renderiza la vista de detalle con los datos del curso y sus asignaturas
     res.render('cursoDetalle', { curso: curso[0], asignaturas });
   } catch (err) {
     console.error('❌ Error al obtener detalle del curso:', err);

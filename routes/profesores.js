@@ -1,11 +1,17 @@
 import express from 'express';
 import pool from '../db/pool.js';
 
+// Crea un router de Express para gestionar las rutas de profesores
 const router = express.Router();
 
-// 📋 Listar profesores
+/**
+ * GET /profesores
+ * Muestra el listado completo de todos los profesores
+ * Incluye su especialidad y el curso del que son tutores (si aplica)
+ */
 router.get('/', async (req, res) => {
   try {
+    // Consulta que une profesor con persona y curso (LEFT JOIN para incluir profesores sin tutoría)
     const [rows] = await pool.query(`
       SELECT 
         pr.id AS profesor_id,
@@ -18,6 +24,7 @@ router.get('/', async (req, res) => {
       LEFT JOIN curso c ON c.tutor_id = pr.id
       ORDER BY p.apellidos, p.nombre
     `);
+    // Renderiza la vista con el listado de profesores
     res.render('profesores', { profesores: rows });
   } catch (err) {
     console.error('❌ Error al obtener profesores:', err);
@@ -25,12 +32,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 📝 Ver detalle de un profesor
+/**
+ * GET /profesores/:id
+ * Muestra el detalle de un profesor específico con todas las asignaturas que imparte
+ * @param {number} id - ID del profesor
+ */
 router.get('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Extrae el ID de los parámetros de la URL
     
-    // Datos del profesor
+    // Primera consulta: obtiene los datos personales del profesor y su tutoría
     const [profesor] = await pool.query(`
       SELECT 
         pr.id AS profesor_id,
@@ -45,11 +56,12 @@ router.get('/:id', async (req, res) => {
       WHERE pr.id = ?
     `, [id]);
     
+    // Verifica si el profesor existe
     if (profesor.length === 0) {
       return res.status(404).send('Profesor no encontrado');
     }
     
-    // Asignaturas que imparte
+    // Segunda consulta: obtiene todas las asignaturas que imparte el profesor
     const [asignaturas] = await pool.query(`
       SELECT 
         a.id,
@@ -63,6 +75,7 @@ router.get('/:id', async (req, res) => {
       ORDER BY c.nombre, a.nombre
     `, [id]);
     
+    // Renderiza la vista de detalle con los datos del profesor y sus asignaturas
     res.render('profesorDetalle', { profesor: profesor[0], asignaturas });
   } catch (err) {
     console.error('❌ Error al obtener detalle del profesor:', err);
@@ -70,10 +83,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 📚 Ver asignaturas que imparte un profesor
+/**
+ * GET /profesores/:id/asignaturas
+ * Muestra una vista específica con todas las asignaturas que imparte un profesor
+ * Ruta alternativa a la vista de detalle del profesor
+ * @param {number} id - ID del profesor
+ */
 router.get('/:id/asignaturas', async (req, res) => {
   try {
     const { id } = req.params;
+    // Obtiene todas las asignaturas del profesor con información del curso
     const [rows] = await pool.query(`
       SELECT 
         a.id, 
@@ -86,6 +105,7 @@ router.get('/:id/asignaturas', async (req, res) => {
       WHERE a.profesor_id = ?
       ORDER BY c.nombre, a.nombre
     `, [id]);
+    // Renderiza una vista específica para las asignaturas del profesor
     res.render('asignaturasProfesor', { asignaturas: rows, profesorId: id });
   } catch (err) {
     console.error('❌ Error al obtener asignaturas del profesor:', err);
