@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<h2 class="mb-4">Matricular alumno</h2>
+
+<form action="/alumnos/matricular" method="POST">
+  <input type="hidden" name="alumno_id" value="<%= alumnoId %>">
+  <div class="mb-3">
+    <label class="form-label">Asignatura</label>
+    <select name="asignatura_id" class="form-select" required>
+      <% asigs.forEach(a => { %>
+        <option value="<%= a.id %>"><%= a.nombre %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Nota (opcional)</label>
+    <input type="number" step="0.1" name="nota" class="form-control" placeholder="Ej: 8.5">
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar matrícula</button>
+</form>
+
+<%- include('partials/footer') %>

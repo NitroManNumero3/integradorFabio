@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<h2 class="mb-4">Nueva asignatura</h2>
+
+<form action="/asignaturas/nueva" method="POST">
+  <div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input type="text" name="nombre" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Horas semanales</label>
+    <input type="number" name="horas_semanales" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Curso</label>
+    <select name="curso_id" class="form-select" required>
+      <% cursos.forEach(c => { %>
+        <option value="<%= c.id %>"><%= c.nombre %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Profesor</label>
+    <select name="profesor_id" class="form-select">
+      <% profesores.forEach(p => { %>
+        <option value="<%= p.id %>"><%= p.nombre %> <%= p.apellidos %></option>
+      <% }) %>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-success">Guardar</button>
+</form>
+
+<%- include('partials/footer') %>
