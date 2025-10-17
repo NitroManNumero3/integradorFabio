@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-mortarboard"></i> <%= curso.nombre %>
+  </h2>
+  <a href="/cursos" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Información del Curso</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Código:</strong> <%= curso.codigo %></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Nombre:</strong> <%= curso.nombre %></p>
+      </div>
+      <div class="col-md-12">
+        <p>
+          <strong>Tutor:</strong> 
+          <% if (curso.tutor) { %>
+            <span class="badge bg-success"><%= curso.tutor %></span>
+          <% } else { %>
+            <span class="text-muted">Sin tutor asignado</span>
+          <% } %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mb-3">
+  <i class="bi bi-journal-text"></i> Asignaturas del Curso
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Código</th>
+        <th>Asignatura</th>
+        <th>Horas/Semana</th>
+        <th>Profesor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (asignaturas.length === 0) { %>
+        <tr>
+          <td colspan="4" class="text-center text-muted">
+            No hay asignaturas en este curso
+          </td>
+        </tr>
+      <% } else { %>
+        <% asignaturas.forEach(a => { %>
+          <tr>
+            <td><strong><%= a.codigo %></strong></td>
+            <td><%= a.nombre %></td>
+            <td class="text-center"><%= a.horas_semanales %>h</td>
+            <td><%= a.profesor %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

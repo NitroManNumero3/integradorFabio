@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-person-badge"></i> <%= profesor.nombre %> <%= profesor.apellidos %>
+  </h2>
+  <a href="/profesores" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">
+    <h5 class="mb-0">Información Personal</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Nombre completo:</strong> <%= profesor.nombre %> <%= profesor.apellidos %></p>
+        <p><strong>DNI:</strong> <%= profesor.dni %></p>
+        <p><strong>Edad:</strong> <%= profesor.edad %> años</p>
+        <p><strong>Especialidad:</strong> 
+          <% if (profesor.especialidad) { %>
+            <span class="badge bg-info"><%= profesor.especialidad %></span>
+          <% } else { %>
+            N/A
+          <% } %>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Teléfono:</strong> <%= profesor.telefono || 'N/A' %></p>
+        <p><strong>Dirección:</strong> <%= profesor.direccion || 'N/A' %></p>
+        <p><strong>Población:</strong> <%= profesor.poblacion || 'N/A' %></p>
+        <p><strong>Tutoría:</strong> 
+          <% if (profesor.curso_tutor) { %>
+            <span class="badge bg-success">
+              <i class="bi bi-award"></i> Tutor de <%= profesor.curso_tutor %>
+            </span>
+          <% } else { %>
+            <span class="text-muted">No es tutor</span>
+          <% } %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mb-3">
+  <i class="bi bi-journal-text"></i> Asignaturas que Imparte
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Código</th>
+        <th>Asignatura</th>
+        <th>Curso</th>
+        <th>Horas/Semana</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (asignaturas.length === 0) { %>
+        <tr>
+          <td colspan="4" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No imparte asignaturas actualmente
+          </td>
+        </tr>
+      <% } else { %>
+        <% asignaturas.forEach(a => { %>
+          <tr>
+            <td><strong><%= a.codigo %></strong></td>
+            <td><%= a.nombre %></td>
+            <td><%= a.curso %></td>
+            <td class="text-center"><%= a.horas_semanales %>h</td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<% if (asignaturas.length > 0) { %>
+  <div class="alert alert-info mt-3">
+    <strong>Resumen:</strong> Imparte <strong><%= asignaturas.length %></strong> asignatura(s) con un total de 
+    <strong><%= asignaturas.reduce((sum, a) => sum + a.horas_semanales, 0) %></strong> horas semanales.
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

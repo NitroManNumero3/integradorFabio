@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<h2 class="mb-4">
+  <i class="bi bi-calendar3"></i> Horarios de Clases
+</h2>
+
+<div class="table-responsive">
+  <table class="table table-hover table-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>Asignatura</th>
+        <th>Curso</th>
+        <th>Aula</th>
+        <th>Piso</th>
+        <th>Día</th>
+        <th>Mes</th>
+        <th>Horario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (horarios.length === 0) { %>
+        <tr>
+          <td colspan="7" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No hay horarios registrados
+          </td>
+        </tr>
+      <% } else { %>
+        <% horarios.forEach(h => { %>
+          <tr>
+            <td>
+              <strong><%= h.asignatura_codigo %></strong> - <%= h.asignatura %>
+            </td>
+            <td><%= h.curso %></td>
+            <td><span class="badge bg-danger"><%= h.aula %></span></td>
+            <td>Piso <%= h.piso %></td>
+            <td><%= h.dia_semana %></td>
+            <td>Mes <%= h.mes %></td>
+            <td>
+              <%= h.hora_inicio.substring(0,5) %> - <%= h.hora_fin.substring(0,5) %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

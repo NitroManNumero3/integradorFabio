@@ -1,22 +1,69 @@
 <%- include('partials/header') %>
 
-<h2 class="mb-4">Matricular alumno</h2>
+<h2 class="mb-4">
+  <i class="bi bi-plus-circle"></i> Matricular Alumno
+</h2>
 
-<form action="/alumnos/matricular" method="POST">
-  <input type="hidden" name="alumno_id" value="<%= alumnoId %>">
-  <div class="mb-3">
-    <label class="form-label">Asignatura</label>
-    <select name="asignatura_id" class="form-select" required>
-      <% asigs.forEach(a => { %>
-        <option value="<%= a.id %>"><%= a.nombre %></option>
-      <% }) %>
-    </select>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle"></i>
+      <strong>Alumno:</strong> <%= alumno.nombre_completo %>
+    </div>
+    
+    <form action="/alumnos/matricular" method="POST">
+      <input type="hidden" name="alumno_id" value="<%= alumno.id %>">
+      
+      <div class="mb-3">
+        <label class="form-label">
+          <i class="bi bi-journal-text"></i> Asignatura
+        </label>
+        <select name="asignatura_id" class="form-select" required>
+          <option value="">Seleccione una asignatura...</option>
+          <% asignaturas.forEach(a => { %>
+            <option value="<%= a.id %>">
+              <%= a.codigo %> - <%= a.nombre %> (<%= a.curso %>)
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">
+          <i class="bi bi-star"></i> Nota (opcional)
+        </label>
+        <input 
+          type="number" 
+          step="0.01" 
+          min="0" 
+          max="10" 
+          name="nota" 
+          class="form-control" 
+          placeholder="Ej: 8.5">
+        <small class="form-text text-muted">Valor entre 0 y 10</small>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">
+          <i class="bi bi-exclamation-triangle"></i> Incidencias (opcional)
+        </label>
+        <textarea 
+          name="incidencias" 
+          class="form-control" 
+          rows="3" 
+          placeholder="Ej: Falta ocasional de deberes"></textarea>
+      </div>
+      
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle"></i> Guardar Matrícula
+        </button>
+        <a href="/alumnos/<%= alumno.id %>" class="btn btn-secondary">
+          <i class="bi bi-x-circle"></i> Cancelar
+        </a>
+      </div>
+    </form>
   </div>
-  <div class="mb-3">
-    <label class="form-label">Nota (opcional)</label>
-    <input type="number" step="0.1" name="nota" class="form-control" placeholder="Ej: 8.5">
-  </div>
-  <button type="submit" class="btn btn-primary">Guardar matrícula</button>
-</form>
+</div>
 
 <%- include('partials/footer') %>

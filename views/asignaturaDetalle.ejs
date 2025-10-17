@@ -1,0 +1,122 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-journal-text"></i> <%= asignatura.nombre %>
+  </h2>
+  <a href="/asignaturas" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-info text-white">
+    <h5 class="mb-0">Información de la Asignatura</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Código:</strong> <%= asignatura.codigo %></p>
+        <p><strong>Nombre:</strong> <%= asignatura.nombre %></p>
+        <p><strong>Horas semanales:</strong> <%= asignatura.horas_semanales %>h</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Curso:</strong> <%= asignatura.curso %></p>
+        <p><strong>Profesor:</strong> <%= asignatura.profesor %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mb-3">
+  <i class="bi bi-people"></i> Alumnos Matriculados
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Alumno</th>
+        <th>Nota</th>
+        <th>Incidencias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (alumnos.length === 0) { %>
+        <tr>
+          <td colspan="3" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No hay alumnos matriculados
+          </td>
+        </tr>
+      <% } else { %>
+        <% alumnos.forEach(a => { %>
+          <tr>
+            <td>
+              <a href="/alumnos/<%= a.alumno_id %>"><%= a.alumno %></a>
+            </td>
+            <td class="text-center">
+              <% if (a.nota !== null) { %>
+                <% if (a.nota >= 5) { %>
+                  <span class="badge bg-success"><%= a.nota %></span>
+                <% } else { %>
+                  <span class="badge bg-danger"><%= a.nota %></span>
+                <% } %>
+              <% } else { %>
+                <span class="text-muted">Sin nota</span>
+              <% } %>
+            </td>
+            <td>
+              <% if (a.incidencias) { %>
+                <span class="text-warning">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <%= a.incidencias %>
+                </span>
+              <% } else { %>
+                <span class="text-muted">-</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<h4 class="mb-3 mt-4">
+  <i class="bi bi-calendar3"></i> Horarios
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-hover table-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>Aula</th>
+        <th>Piso</th>
+        <th>Día</th>
+        <th>Mes</th>
+        <th>Horario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (horarios.length === 0) { %>
+        <tr>
+          <td colspan="5" class="text-center text-muted">
+            No hay horarios asignados
+          </td>
+        </tr>
+      <% } else { %>
+        <% horarios.forEach(h => { %>
+          <tr>
+            <td><span class="badge bg-danger"><%= h.aula %></span></td>
+            <td>Piso <%= h.piso %></td>
+            <td><%= h.dia_semana %></td>
+            <td>Mes <%= h.mes %></td>
+            <td><%= h.hora_inicio.substring(0,5) %> - <%= h.hora_fin.substring(0,5) %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

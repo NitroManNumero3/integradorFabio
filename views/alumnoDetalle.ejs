@@ -1,0 +1,121 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>
+    <i class="bi bi-person"></i> <%= alumno.nombre %> <%= alumno.apellidos %>
+  </h2>
+  <a href="/alumnos" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Información Personal</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Nombre completo:</strong> <%= alumno.nombre %> <%= alumno.apellidos %></p>
+        <p><strong>DNI:</strong> <%= alumno.dni %></p>
+        <p><strong>Edad:</strong> <%= alumno.edad %> años</p>
+        <p><strong>Fecha de nacimiento:</strong> <%= new Date(alumno.fecha_nacimiento).toLocaleDateString('es-ES') %></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Teléfono:</strong> <%= alumno.telefono || 'N/A' %></p>
+        <p><strong>Dirección:</strong> <%= alumno.direccion || 'N/A' %></p>
+        <p><strong>Población:</strong> <%= alumno.poblacion || 'N/A' %></p>
+        <p><strong>Código Postal:</strong> <%= alumno.codigo_postal || 'N/A' %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>
+    <i class="bi bi-journal-check"></i> Matrículas
+  </h4>
+  <a href="/alumnos/matricular/<%= alumno.alumno_id %>" class="btn btn-primary">
+    <i class="bi bi-plus-circle"></i> Nueva Matrícula
+  </a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Código</th>
+        <th>Asignatura</th>
+        <th>Curso</th>
+        <th>Horas/Sem</th>
+        <th>Profesor</th>
+        <th>Nota</th>
+        <th>Incidencias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (matriculas.length === 0) { %>
+        <tr>
+          <td colspan="7" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No hay matrículas registradas
+          </td>
+        </tr>
+      <% } else { %>
+        <% matriculas.forEach(m => { %>
+          <tr>
+            <td><strong><%= m.codigo %></strong></td>
+            <td><%= m.asignatura %></td>
+            <td><%= m.curso %></td>
+            <td class="text-center"><%= m.horas_semanales %>h</td>
+            <td><%= m.profesor %></td>
+            <td class="text-center">
+              <% if (m.nota !== null) { %>
+                <% if (m.nota >= 5) { %>
+                  <span class="badge bg-success"><%= m.nota %></span>
+                <% } else { %>
+                  <span class="badge bg-danger"><%= m.nota %></span>
+                <% } %>
+              <% } else { %>
+                <span class="text-muted">Sin nota</span>
+              <% } %>
+            </td>
+            <td>
+              <% if (m.incidencias) { %>
+                <span class="text-warning" title="<%= m.incidencias %>">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <%= m.incidencias.substring(0, 30) %><%= m.incidencias.length > 30 ? '...' : '' %>
+                </span>
+              <% } else { %>
+                <span class="text-muted">-</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<% if (matriculas.length > 0) { %>
+  <div class="alert alert-info mt-3">
+    <strong>Estadísticas:</strong>
+    <ul class="mb-0">
+      <li>Total de asignaturas matriculadas: <strong><%= matriculas.length %></strong></li>
+      <li>Nota media: 
+        <strong>
+          <% 
+            const notasValidas = matriculas.filter(m => m.nota !== null);
+            if (notasValidas.length > 0) {
+              const media = notasValidas.reduce((sum, m) => sum + parseFloat(m.nota), 0) / notasValidas.length;
+          %>
+            <%= media.toFixed(2) %>
+          <% } else { %>
+            N/A
+          <% } %>
+        </strong>
+      </li>
+    </ul>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

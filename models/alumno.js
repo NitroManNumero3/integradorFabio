@@ -1,16 +1,38 @@
 import Persona from './persona.js';
 
 export default class Alumno extends Persona {
-  constructor(nombre, apellidos, direccion, poblacion, dni, fecha_nacimiento, codigo_postal, telefono, matriculas = []) {
+  constructor(nombre, apellidos, direccion, poblacion, dni, fecha_nacimiento, codigo_postal, telefono) {
     super(nombre, apellidos, direccion, poblacion, dni, fecha_nacimiento, codigo_postal, telefono);
-    this.matriculas = matriculas; // lista de asignaturas o notas
+    this.matriculas = []; // Array de objetos { asignatura, nota, incidencias }
   }
 
-  agregarMatricula(matricula) {
-    this.matriculas.push(matricula);
+  matricularEnAsignatura(asignatura, nota = null, incidencias = null) {
+    this.matriculas.push({
+      asignatura,
+      nota,
+      incidencias
+    });
+  }
+
+  agregarIncidencia(asignaturaId, incidencia) {
+    const matricula = this.matriculas.find(m => m.asignatura.id === asignaturaId);
+    if (matricula) {
+      if (!matricula.incidencias) {
+        matricula.incidencias = incidencia;
+      } else {
+        matricula.incidencias += '; ' + incidencia;
+      }
+    }
+  }
+
+  actualizarNota(asignaturaId, nota) {
+    const matricula = this.matriculas.find(m => m.asignatura.id === asignaturaId);
+    if (matricula) {
+      matricula.nota = nota;
+    }
   }
 
   mostrarDatos() {
-    return `Alumno: ${super.mostrarDatos()} - ${this.matriculas.length} materias`;
+    return `Alumno: ${super.mostrarDatos()} - ${this.matriculas.length} asignaturas matriculadas`;
   }
 }

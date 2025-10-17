@@ -1,28 +1,67 @@
 <%- include('partials/header') %>
 
-<h2 class="mb-4">Profesores</h2>
+<h2 class="mb-4">
+  <i class="bi bi-person-badge"></i> Profesores
+</h2>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>DNI</th>
-      <th>Teléfono</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% profesores.forEach(p => { %>
+<div class="table-responsive">
+  <table class="table table-hover table-striped">
+    <thead class="table-dark">
       <tr>
-        <td><%= p.nombre %> <%= p.apellidos %></td>
-        <td><%= p.dni %></td>
-        <td><%= p.telefono %></td>
-        <td>
-          <a href="/profesores/<%= p.profesor_id %>/asignaturas" class="btn btn-sm btn-secondary">Ver asignaturas</a>
-        </td>
+        <th>Nombre Completo</th>
+        <th>DNI</th>
+        <th>Especialidad</th>
+        <th>Teléfono</th>
+        <th>Tutoría</th>
+        <th>Acciones</th>
       </tr>
-    <% }) %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% if (profesores.length === 0) { %>
+        <tr>
+          <td colspan="6" class="text-center text-muted">
+            <i class="bi bi-inbox"></i> No hay profesores registrados
+          </td>
+        </tr>
+      <% } else { %>
+        <% profesores.forEach(p => { %>
+          <tr>
+            <td>
+              <strong><%= p.nombre %> <%= p.apellidos %></strong>
+            </td>
+            <td><%= p.dni %></td>
+            <td>
+              <% if (p.especialidad) { %>
+                <span class="badge bg-info"><%= p.especialidad %></span>
+              <% } else { %>
+                <span class="text-muted">N/A</span>
+              <% } %>
+            </td>
+            <td><%= p.telefono || 'N/A' %></td>
+            <td>
+              <% if (p.curso_tutor) { %>
+                <span class="badge bg-success">
+                  <i class="bi bi-award"></i> <%= p.curso_tutor %>
+                </span>
+              <% } else { %>
+                <span class="text-muted">-</span>
+              <% } %>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <a href="/profesores/<%= p.profesor_id %>" class="btn btn-info" title="Ver detalle">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <a href="/profesores/<%= p.profesor_id %>/asignaturas" class="btn btn-secondary" title="Ver asignaturas">
+                  <i class="bi bi-journal-text"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
 
 <%- include('partials/footer') %>
